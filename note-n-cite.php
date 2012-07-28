@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Note'n'Cite
-Plugin URI: github.com/javajawa/note-n-cite
+Plugin URI: github.com/javajawa/Note-n-Cite
 Description: Lightweight and simply reference & footnotes plugin
 Version: 0.1.0
 Author: Benedict Harcourt

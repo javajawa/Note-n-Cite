@@ -28,7 +28,7 @@ WordPress.
 Citations work in a similar way, but are expected to be links to other websites.
 Therefore, the content is ignored in favour of an href attribute.
 
-    [cite href="http://github.com/javajawa/note-n-cite"]
+    [cite href="http://github.com/javajawa/Note-n-Cite"]
 
 An entry will be created in the footnote list, however both the entry and the
 marker will be links to the referenced website, set to open in a new window/tab.
