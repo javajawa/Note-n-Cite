@@ -1,0 +1,21 @@
+.footnote, .citation
+{
+	font-size: 75%;
+	vertical-align: top;
+	margin-top: -0.3em;
+	display: inline-block;
+}
+
+ol.footnotes
+{
+	list-style: none;
+	padding: 0 5em;
+}
+
+.citation:after
+{
+	content: url(cite.png);
+	width: 1ex;
+	height: 1ex;
+}
+
