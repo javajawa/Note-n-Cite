@@ -96,7 +96,7 @@ EOF;
 			$name = $num;
 
 		// Generate IDs and add to array
-		$noteId = $post->ID.'-n-'.$name;
+		$noteId = $post->ID . '-n-' . $name;
 		$backId = 'to-' . $noteId;
 		$href = $atts['href'];
 		$post_arr[$noteId] = $num;
@@ -120,9 +120,10 @@ EOF;
 		if (!array_key_exists('name', $atts))
 			return '';
 
-		$num = $this->bullets[$post->ID][$atts['name']];
+		$noteId = $post->ID . '-n-' . $atts['name'];
+		$num = $this->bullets[$post->ID][$noteId];
 
-		return '<a href="#'.$atts['name'].'" class="footnote">'.$num.'</a>';
+		return '<a href="#'.$noteId.'" class="footnote">'.$num.'</a>';
 
 	}
 
