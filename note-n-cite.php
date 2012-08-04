@@ -71,7 +71,8 @@ class NoteAndCite
 			</li>
 EOF;
 
-		return '<a href="#'.$noteId.'" class="footnote" id="'.$backId.'">'.$num.'</a>';
+		$content = htmlentities(strip_tags($content));
+		return '<a href="#'.$noteId.'" class="footnote" id="'.$backId.'" title="'.$content.'">'.$num.'</a>';
 	}
 
 	function cite($atts)
