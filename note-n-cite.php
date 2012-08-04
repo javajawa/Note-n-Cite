@@ -76,9 +76,6 @@ EOF;
 
 	function cite($atts)
 	{
-		if (!array_key_exists('href', $atts))
-			return '';
-
 		global $post;
 
 		// Create array for this post
@@ -98,7 +95,7 @@ EOF;
 		// Generate IDs and add to array
 		$noteId = $post->ID . '-n-' . $name;
 		$backId = 'to-' . $noteId;
-		$href = $atts['href'];
+		$href = array_key_exists('href', $atts) ? $atts['href'] : 'Citation Needed';
 		$post_arr[$noteId] = $num;
 
 		// Fill in the text of the note
@@ -110,7 +107,10 @@ EOF;
 			</li>
 EOF;
 
-		return '<a href="'.$href.'" class="citation" id="'.$backId.'" target="_blank">'.$num.'</a>';
+		if (array_key_exists('href', $atts)
+			return '<a href="'.$href.'" class="citation" id="'.$backId.'" target="_blank">'.$num.'</a>';
+		else
+			return '<a href="#'.$noteId.'" class="citation" id="'.$backId.'">Citation Needed</a>';
 	}
 
 	function backref($atts = array())
