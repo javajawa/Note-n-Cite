@@ -50,14 +50,41 @@ WordPress.
 Installation
 ------------
 
-Installation can either be done by
-* Uploading the contents of this plug-in to a folder in ```wp-content/plugins```
+This plug-in is not currently available through the WordPress plug-in search.
+However, installation is still simple.
+
+First, you need to obtain a zip of the code. 'Stable' versions are available
+under the downloads tab, or you can get a copy of any commit by clicking the 'zip'
+button at the top of that commit's page.
+
+
+There are two methods
+- Through the WordPress admin interface, 'Add New', and upload the zip
+- Uploading and extract the zip to a folder in ```wp-content/plugins```
 (the name of the folder doesn't matter, but note-n-cite is recommended for
 consistency reasons).
-* Searching for Note'n'Cite in the plug-ins section of administration interface.
+
+Note that the zips from commit pages will install to a different directory
+per-commit. Attempting to run two different versions of this code at the same
+time will cause errors. Old versions can be deleted from the Plugins page, or
+manually from the folder ```wp-content/plugins```
 
 Once the plug-in is installed, it have to be activated through the 'Plugins'
 panel in the WordPress administration interface.
+
+Configuration
+-------------
+
+Currently this plug-in does not have an options page.
+There are, however, a number of options that you can set by editing the plug-in.
+
+If you want notes and citations to be counted and listed separately, then change
+the define at the top of note-n-cite.php to
+    define('SEPARATE_CITE_NOTE', true);
+
+The exact formatting of the output can be controlled from note-n-cite.css
+(some knowledge of CSS recommended), and notes.php (which you are advised not to
+edit unless you have reasonable experience of HTML and PHP).
 
 License
 -------
