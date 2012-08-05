@@ -28,7 +28,7 @@ WordPress.
 Citations work in a similar way, but are expected to be links to other websites.
 Therefore, the expect an href attribute.
 
-    [cite href="http://github.com/javajawa/Note-n-Cite"]
+    [cite href="http://github.com/javajawa/Note-n-Cite" /]
 
 An entry will be created in the footnote list, however both the entry and the
 marker will be links to the referenced website, set to open in a new window/tab.
@@ -42,7 +42,7 @@ work correctly; unnamed entries are given numbers, so it is advised that the
 name field contains at least one letter to avoid any conflicts.
 
     [ref name="hello"]Hello world![/ref]
-    [backref name="hello"]
+    [backref name="hello" /]
 
 This functionality is also entirely backwards compatible with Footnotes for
 WordPress.
