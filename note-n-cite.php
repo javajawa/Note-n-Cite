@@ -75,7 +75,7 @@ EOF;
 		return '<a href="#'.$noteId.'" class="footnote" id="'.$backId.'" title="'.$content.'">'.$num.'</a>';
 	}
 
-	function cite($atts)
+	function cite($atts, $content)
 	{
 		global $post;
 
@@ -98,12 +98,14 @@ EOF;
 		$backId = 'to-' . $noteId;
 		$href = array_key_exists('href', $atts) ? $atts['href'] : 'Citation Needed';
 		$post_arr[$noteId] = $num;
+		if ($content === null) $content = '';
 
 		// Fill in the text of the note
 		$this->notes[] = <<<EOF
 			<li id="$noteId">
 				<span class="note-marker">$num</span>
 				<a class="note-return" href="#$backId">&#x2191;</a>
+				$content
 				<a rel="cite" href="$href" target="_blank">$href</a>
 			</li>
 EOF;
