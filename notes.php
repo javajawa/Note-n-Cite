@@ -25,7 +25,7 @@ class Note
 		$this->returns[] = $return;
 
 		return sprintf(
-			'<a href="%s" class="footnote" id="%s" target="_blank" title="%s">%s</a>',
+			'<a href="%s" class="footnote" id="%s" title="%s">%s</a>',
 			$this->getEntryId(), $return, htmlentities(strip_tags($this->content)), $this->num
 		);
 	}
