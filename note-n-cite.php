@@ -20,10 +20,10 @@ class NoteAndCite
 		add_shortcode('cite', array(&$this, 'cite'));
 		add_shortcode('backref', array(&$this, 'backref'));
 
-		add_filter('the_content', array(&$this, 'end_of_post'), 1000, 2);
+		add_filter('the_content', array(&$this, 'on_new_post'), 1, 1);
+		add_filter('the_content', array(&$this, 'end_of_post'), 1000, 1);
 
 		add_action('init', array(&$this, 'add_style'));
-		add_action('init', array(&$this, 'on_new_post'));
 	}
 
 	function add_style()
@@ -36,11 +36,12 @@ class NoteAndCite
 	private $named_entries;
 	private $post;
 
-	public function on_new_post()
+	public function on_new_post($content)
 	{
 		global $post;
 		$this->post = $post->ID;
 		$this->named_entries = array();
+		return $content;
 		$this->notes = array();
 		if (SEPARATE_CITE_NOTE)
 			$this->citations = array();
@@ -178,8 +179,6 @@ EOF;
 		$content .= $this->note_list();
 		if (SEPARATE_CITE_NOTE)
 			$content .= $this->cite_list();
-
-		$this->on_new_post();
 
 		return $content;
 	}
