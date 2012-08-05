@@ -17,8 +17,11 @@ class NoteAndCite
 		add_shortcode('ref',  array(&$this, 'note'));
 		add_shortcode('cite', array(&$this, 'cite'));
 		add_shortcode('backref', array(&$this, 'backref'));
-		add_filter('the_content', array(&$this, 'note_list'), 1000, 2);
+
+		add_filter('the_content', array(&$this, 'end_of_post'), 1000, 2);
+
 		add_action('init', array(&$this, 'add_style'));
+		add_action('init', array(&$this, 'on_new_post'));
 	}
 
 	function add_style()
@@ -26,44 +29,39 @@ class NoteAndCite
 		wp_enqueue_style('note-n-cite', plugin_dir_url(__FILE__) . 'note-n-cite.css');
 	}
 
-	var $notes = array();
-	var $entries = array();
+	private $citations;
+	private $notes;
+	private $named_entries;
+	private $post;
+
+	public function on_new_post()
+	{
+		global $post;
+		$this->post = $post->ID;
+		$this->citations = array();
+		$this->notes = &$this->citations;
+		$this->named_entries = array();
+	}
 
 	function note($atts, $content)
 	{
 		if ($content == null)
 			return '';
 
-		global $post;
-
-		// Create array for this post
-		if (!array_key_exists($post->ID, $this->entries))
-			$this->entries[$post->ID] = array();
-
-		// Select array
-		$post_arr = &$this->entries[$post->ID];
-
 		// Calculate bullet number + name
-		$num = count($post_arr) + 1;
-		if (array_key_exists('name', $atts))
-			$name = $atts['name'];
-		else
-			$name = $num;
-
+		$num = count($this->notes) + 1;
 		// Generate IDs and add to array
-		$noteId = $post->ID.'-n-'.$name;
+		$noteId = $this->post.'-n-'.$num;
 		$backId = 'to-' . $noteId;
-		$post_arr[$noteId] = $num;
 
-		// Create the text node for this note, and mark it in the accumulator
-		$note = '';
-		$this->notes[] = &$note;
+		// Make sure inner tags have higher numbers
+		$this->notes[] = null;
 
 		// Allow any inside shortcodes to do their work, included nested notes.
 		$content = do_shortcode($content);
 
 		// Fill in the text of the note
-		$note = <<<EOF
+		$entry = <<<EOF
 			<li id="$noteId">
 				<span class="note-marker">$num</span>
 				<a class="note-return" href="#$backId">&#x2191;</a>
@@ -72,76 +70,133 @@ class NoteAndCite
 EOF;
 
 		$content = htmlentities(strip_tags($content));
-		return '<a href="#'.$noteId.'" class="footnote" id="'.$backId.'" title="'.$content.'">'.$num.'</a>';
+		$link = '<a href="#'.$noteId.'" class="footnote" id="'.$backId.'" title="'.$content.'">'.$num.'</a>';
+
+		$note = new Note($link, $entry);
+		$this->notes[] = &$note;
+
+		if (array_key_exists('name', $atts))
+			$this->named_entries[$atts['name']] = &$note;
+
+		return $link;
 	}
 
-	function cite($atts, $content)
+	function cite($atts, $content = null)
 	{
-		global $post;
-
-		// Create array for this post
-		if (!array_key_exists($post->ID, $this->entries))
-			$this->entries[$post->ID] = array();
-
-		// Select array
-		$post_arr = &$this->entries[$post->ID];
-
 		// Calculate bullet number + name
-		$num = count($post_arr) + 1;
-		if (array_key_exists('name', $atts))
-			$name = $atts['name'];
-		else
-			$name = $num;
-
-		// Generate IDs and add to array
-		$noteId = $post->ID . '-n-' . $name;
+		$num = count($this->citations) + 1;
+		// Generate IDs
+		$noteId = $post->ID . '-n-' . $num;
 		$backId = 'to-' . $noteId;
-		$href = array_key_exists('href', $atts) ? $atts['href'] : 'Citation Needed';
-		$post_arr[$noteId] = $num;
-		if ($content === null) $content = '';
 
-		// Fill in the text of the note
-		$this->notes[] = <<<EOF
-			<li id="$noteId">
-				<span class="note-marker">$num</span>
-				<a class="note-return" href="#$backId">&#x2191;</a>
-				$content
-				<a rel="cite" href="$href" target="_blank">$href</a>
-			</li>
-EOF;
+		if ($content === null)
+			$content = '';
 
 		if (array_key_exists('href', $atts))
-			return '<a rel="cite" href="'.$href.'" class="citation" id="'.$backId.'" target="_blank">'.$num.'</a>';
+		{
+			$link = <<<EOF
+<a rel="cite" href="$href" class="citation" id="$backId" target="_blank">$num</a>
+EOF;
+			$entry = <<<EOF
+				<li id="$noteId">
+					<span class="note-marker">$num</span>
+					<a class="note-return" href="#$backId">&#x2191;</a>
+					$content
+					<a rel="cite" href="$href" target="_blank">$href</a>
+				</li>
+EOF;
+		}
 		else
-			return '<a href="#'.$noteId.'" class="citation" id="'.$backId.'">Citation Needed</a>';
+		{
+			$link = <<<EOF
+<a href="#$noteId" class="citation" id="$backId">Citation Needed</a>
+EOF;
+			$entry = <<<EOF
+				<li id="$noteId">
+					<span class="note-marker">$num</span>
+					<a class="note-return" href="#$backId">&#x2191;</a>
+					[Citation Needed] $content
+				</li>
+EOF;
+		}
+
+		$note = new Note($link, $entry);
+		$this->citations[] = &$note;
+
+		if (array_key_exists('name', $atts))
+			$this->named_entries[$atts['name']] = &$note;
+
+		return $link;
 	}
 
 	function backref($atts = array())
 	{
-		global $post;
-
-		if (!array_key_exists('name', $atts))
+		if (array_key_exists('name', $atts) && array_key_exists($atts['name'], $this->named_entries))
+			return $this->named_entries[$atts['name']]->getLink();
+		else
 			return '';
-
-		$noteId = $post->ID . '-n-' . $atts['name'];
-		$num = $this->bullets[$post->ID][$noteId];
-
-		return '<a href="#'.$noteId.'" class="footnote">'.$num.'</a>';
-
 	}
 
-	function note_list($content)
+	function note_list()
 	{
-		if (count($this->notes) > 0)
-		{
-			$content .= '<ol class="footnotes">' .
-				implode("\n\t", $this->notes) . '</ol>' . PHP_EOL;
+		if (count($this->notes) == 0)
+			return '';
 
-			$this->notes = array();
+		$ret = '<ol class="footnotes">' . PHP_EOL;
+		foreach ($this->notes as $note)
+		{
+			$ret .= "\t" . $note->getEntry() . PHP_EOL;
 		}
+		$ret .= '</ol>' . PHP_EOL;
+
+		return $ret;
+	}
+
+	function cite_list()
+	{
+		if (count($this->citations) == 0)
+			return '';
+
+		$ret = '<ol class="citations">' . PHP_EOL;
+		foreach ($this->citations as $note)
+		{
+			$ret .= "\t" . $note->getEntry() . PHP_EOL;
+		}
+		$ret .= '</ol>' . PHP_EOL;
+
+		return $ret;
+	}
+
+	function end_of_post($content)
+	{
+		$content .= $this->note_list();
+		$this->on_new_post();
+
 		return $content;
 	}
 }
 
-new NoteAndCite();
+class Note
+{
+	private $link;
+	private $entry;
 
+	public function __construct($link, $entry)
+	{
+		$this->counter_value = $counter_value;
+		$this->link = $link;
+		$this->entry = $entry;
+	}
+
+	public function getLink()
+	{
+		return $this->link;
+	}
+
+	public function getEntry()
+	{
+		return $this->entry;
+	}
+}
+
+new NoteAndCite();
