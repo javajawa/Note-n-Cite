@@ -108,7 +108,7 @@ EOF;
 			</li>
 EOF;
 
-		if (array_key_exists('href', $atts)
+		if (array_key_exists('href', $atts))
 			return '<a href="'.$href.'" class="citation" id="'.$backId.'" target="_blank">'.$num.'</a>';
 		else
 			return '<a href="#'.$noteId.'" class="citation" id="'.$backId.'">Citation Needed</a>';
