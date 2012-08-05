@@ -86,6 +86,15 @@ The exact formatting of the output can be controlled from note-n-cite.css
 (some knowledge of CSS recommended), and notes.php (which you are advised not to
 edit unless you have reasonable experience of HTML and PHP).
 
+Bug Reporting
+-------------
+
+Bug reports and feature requests are most welcome here on GitHub or anywhere you
+happen to track me down to.
+
+Don't forget to look in the current issue list first and, if you have edited the
+code, make sure you supply your version.
+
 License
 -------
 
