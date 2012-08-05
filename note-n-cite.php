@@ -102,14 +102,14 @@ EOF;
 		{
 			$href = $atts['href'];
 			$link = <<<EOF
-<a rel="cite" href="$href" class="citation" id="$backId" target="_blank">$num</a>
+<a href="$href" class="citation" id="$backId" target="_blank">$num</a>
 EOF;
 			$entry = <<<EOF
 				<li id="$noteId">
 					<span class="note-marker">$num</span>
 					<a class="note-return" href="#$backId">&#x2191;</a>
 					$content
-					<a rel="cite" href="$href" target="_blank">$href</a>
+					<a href="$href" target="_blank">$href</a>
 				</li>
 EOF;
 		}
