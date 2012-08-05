@@ -26,7 +26,7 @@ the entry in the list and the marker in the text.
 WordPress.
 
 Citations work in a similar way, but are expected to be links to other websites.
-Therefore, the content is ignored in favour of an href attribute.
+Therefore, the expect an href attribute.
 
     [cite href="http://github.com/javajawa/Note-n-Cite"]
 
@@ -34,6 +34,7 @@ An entry will be created in the footnote list, however both the entry and the
 marker will be links to the referenced website, set to open in a new window/tab.
 If the `href` field is not supplied, the marker will contain the text 'citation
 needed' and the link will function as if it were a note.
+Any content in the citation will be included in the list entry.
 
 If you define an ID for a footnote, you can also refer back to the same footnote
 later on in the document. Names have to be unique per post for the plug-in to
