@@ -1,0 +1,6 @@
+0.2
+
+ - Support for blank citations (show as 'citation needed')
+ - Add support for supplementary content in citations
+ - Citation links have the rel="cite" property
+ - BUGFIX: Backrefs now look up the name correctly
