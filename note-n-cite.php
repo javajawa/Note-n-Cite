@@ -43,12 +43,12 @@ class NoteAndCite
 		global $post;
 		$this->post = $post->ID;
 		$this->named_entries = array();
-		return $content;
 		$this->notes = array();
 		if (SEPARATE_CITE_NOTE)
 			$this->citations = array();
 		else
 			$this->citations = &$this->notes;
+		return $content;
 	}
 
 	function note($atts, $content)
