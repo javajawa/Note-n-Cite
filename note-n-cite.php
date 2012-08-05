@@ -3,7 +3,7 @@
 Plugin Name: Note'n'Cite
 Plugin URI: github.com/javajawa/Note-n-Cite
 Description: Lightweight and simple reference & footnotes plugin
-Version: 0.3-SNAPSHOT
+Version: 0.3
 Author: Benedict Harcourt
 Author URI: harcourtprogramming.co.uk
 License: BSD 3-clause

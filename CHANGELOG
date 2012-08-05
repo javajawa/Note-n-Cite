@@ -1,3 +1,10 @@
+0.3
+
+ - Switch to class architecture
+ - Add flag for treating Notes and Citations separately
+ - Using backref no longer causes duplicate ids
+ - Each use of backref generates an extra up arrow in the entry
+
 0.2
 
  - Support for blank citations (show as 'citation needed')
