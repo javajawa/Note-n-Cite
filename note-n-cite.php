@@ -11,6 +11,8 @@ License: BSD 3-clause
 
 define('SEPARATE_CITE_NOTE', false);
 
+require('notes.php');
+
 class NoteAndCite
 {
 	function __construct()
@@ -56,84 +58,39 @@ class NoteAndCite
 
 		// Calculate bullet number + name
 		$num = count($this->notes) + 1;
-		// Generate IDs and add to array
-		$noteId = $this->post.'-n-'.$num;
-		$backId = 'to-' . $noteId;
 
 		// Make sure inner tags have higher numbers
 		$this->notes[$num] = null;
 
-		// Allow any inside shortcodes to do their work, included nested notes.
-		$content = do_shortcode($content);
-
-		// Fill in the text of the note
-		$entry = <<<EOF
-			<li id="$noteId">
-				<span class="note-marker">$num</span>
-				<a class="note-return" href="#$backId">&#x2191;</a>
-				$content
-			</li>
-EOF;
-
-		$content = htmlentities(strip_tags($content));
-		$link = '<a href="#'.$noteId.'" class="footnote" id="'.$backId.'" title="'.$content.'">'.$num.'</a>';
-
-		$note = new Note($link, $entry);
+		$note = new Note($this->post, $num, do_shortcode($content));
 		$this->notes[$num] = &$note;
 
 		if (array_key_exists('name', $atts))
 			$this->named_entries[$atts['name']] = &$note;
 
-		return $link;
+		return $note->getLink();
 	}
 
 	function cite($atts, $content = null)
 	{
 		// Calculate bullet number + name
 		$num = count($this->citations) + 1;
-		// Generate IDs
-		$noteId = $this->post . '-c-' . $num;
-		$backId = 'to-' . $noteId;
 
 		if ($content === null)
 			$content = '';
 
 		if (array_key_exists('href', $atts))
-		{
 			$href = $atts['href'];
-			$link = <<<EOF
-<a href="$href" class="citation" id="$backId" target="_blank">$num</a>
-EOF;
-			$entry = <<<EOF
-				<li id="$noteId">
-					<span class="note-marker">$num</span>
-					<a class="note-return" href="#$backId">&#x2191;</a>
-					$content
-					<a href="$href" target="_blank">$href</a>
-				</li>
-EOF;
-		}
 		else
-		{
-			$link = <<<EOF
-<a href="#$noteId" class="citation" id="$backId">Citation Needed</a>
-EOF;
-			$entry = <<<EOF
-				<li id="$noteId">
-					<span class="note-marker">$num</span>
-					<a class="note-return" href="#$backId">&#x2191;</a>
-					[Citation Needed] $content
-				</li>
-EOF;
-		}
+			$href = null;
 
-		$note = new Note($link, $entry);
+		$note = new Citation($this->post, $num, $content, $href);
 		$this->citations[$num] = &$note;
 
 		if (array_key_exists('name', $atts))
 			$this->named_entries[$atts['name']] = &$note;
 
-		return $link;
+		return $note->getLink();
 	}
 
 	function backref($atts = array())
@@ -181,28 +138,6 @@ EOF;
 			$content .= $this->cite_list();
 
 		return $content;
-	}
-}
-
-class Note
-{
-	private $link;
-	private $entry;
-
-	public function __construct($link, $entry)
-	{
-		$this->link = $link;
-		$this->entry = $entry;
-	}
-
-	public function getLink()
-	{
-		return $this->link;
-	}
-
-	public function getEntry()
-	{
-		return $this->entry;
 	}
 }
 
