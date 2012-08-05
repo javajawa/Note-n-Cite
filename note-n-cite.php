@@ -55,7 +55,7 @@ class NoteAndCite
 		$backId = 'to-' . $noteId;
 
 		// Make sure inner tags have higher numbers
-		$this->notes[] = null;
+		$this->notes[$num] = null;
 
 		// Allow any inside shortcodes to do their work, included nested notes.
 		$content = do_shortcode($content);
@@ -73,7 +73,7 @@ EOF;
 		$link = '<a href="#'.$noteId.'" class="footnote" id="'.$backId.'" title="'.$content.'">'.$num.'</a>';
 
 		$note = new Note($link, $entry);
-		$this->notes[] = &$note;
+		$this->notes[$num] = &$note;
 
 		if (array_key_exists('name', $atts))
 			$this->named_entries[$atts['name']] = &$note;
@@ -86,7 +86,7 @@ EOF;
 		// Calculate bullet number + name
 		$num = count($this->citations) + 1;
 		// Generate IDs
-		$noteId = $post->ID . '-n-' . $num;
+		$noteId = $this->post . '-n-' . $num;
 		$backId = 'to-' . $noteId;
 
 		if ($content === null)
@@ -94,6 +94,7 @@ EOF;
 
 		if (array_key_exists('href', $atts))
 		{
+			$href = $atts['href'];
 			$link = <<<EOF
 <a rel="cite" href="$href" class="citation" id="$backId" target="_blank">$num</a>
 EOF;
@@ -121,7 +122,7 @@ EOF;
 		}
 
 		$note = new Note($link, $entry);
-		$this->citations[] = &$note;
+		$this->citations[$num] = &$note;
 
 		if (array_key_exists('name', $atts))
 			$this->named_entries[$atts['name']] = &$note;
@@ -183,7 +184,6 @@ class Note
 
 	public function __construct($link, $entry)
 	{
-		$this->counter_value = $counter_value;
 		$this->link = $link;
 		$this->entry = $entry;
 	}
