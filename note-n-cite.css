@@ -6,7 +6,7 @@
 	display: inline-block;
 }
 
-ol.footnotes
+ol.footnotes, ol.citations
 {
 	list-style: none;
 	padding: 0 5em;

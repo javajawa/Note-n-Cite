@@ -9,6 +9,8 @@ Author URI: harcourtprogramming.co.uk
 License: BSD 3-clause
 */
 
+define('SEPARATE_CITE_NOTE', false);
+
 class NoteAndCite
 {
 	function __construct()
@@ -38,9 +40,12 @@ class NoteAndCite
 	{
 		global $post;
 		$this->post = $post->ID;
-		$this->citations = array();
-		$this->notes = &$this->citations;
 		$this->named_entries = array();
+		$this->notes = array();
+		if (SEPARATE_CITE_NOTE)
+			$this->citations = array();
+		else
+			$this->citations = &$this->notes;
 	}
 
 	function note($atts, $content)
@@ -86,7 +91,7 @@ EOF;
 		// Calculate bullet number + name
 		$num = count($this->citations) + 1;
 		// Generate IDs
-		$noteId = $this->post . '-n-' . $num;
+		$noteId = $this->post . '-c-' . $num;
 		$backId = 'to-' . $noteId;
 
 		if ($content === null)
@@ -171,6 +176,9 @@ EOF;
 	function end_of_post($content)
 	{
 		$content .= $this->note_list();
+		if (SEPARATE_CITE_NOTE)
+			$content .= $this->cite_list();
+
 		$this->on_new_post();
 
 		return $content;
