@@ -104,12 +104,12 @@ EOF;
 			<li id="$noteId">
 				<span class="note-marker">$num</span>
 				<a class="note-return" href="#$backId">&#x2191;</a>
-				<a href="$href" target="_blank">$href</a>
+				<a rel="cite" href="$href" target="_blank">$href</a>
 			</li>
 EOF;
 
 		if (array_key_exists('href', $atts))
-			return '<a href="'.$href.'" class="citation" id="'.$backId.'" target="_blank">'.$num.'</a>';
+			return '<a rel="cite" href="'.$href.'" class="citation" id="'.$backId.'" target="_blank">'.$num.'</a>';
 		else
 			return '<a href="#'.$noteId.'" class="citation" id="'.$backId.'">Citation Needed</a>';
 	}
