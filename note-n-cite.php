@@ -11,7 +11,7 @@ License: BSD 3-clause
 
 class NoteAndCite
 {
-	function NoteAndCite()
+	function __construct()
 	{
 		add_shortcode('note', array(&$this, 'note'));
 		add_shortcode('ref',  array(&$this, 'note'));
