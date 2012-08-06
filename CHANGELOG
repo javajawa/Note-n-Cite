@@ -1,3 +1,7 @@
+0.3.1
+
+ - BugFix: Fix missing # in markers, causing broken links
+
 0.3
 
  - Switch to class architecture
