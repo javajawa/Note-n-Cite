@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Note'n'Cite
-Plugin URI: github.com/javajawa/Note-n-Cite
+Plugin URI: https://github.com/javajawa/Note-n-Cite
 Description: Lightweight and simple reference & footnotes plugin
 Version: 0.4-SNAPSHOT
 Author: Benedict Harcourt
@@ -44,7 +44,7 @@ class NoteAndCite
 		$this->post = $post->ID;
 		$this->named_entries = array();
 		$this->notes = array();
-		if (SEPARATE_CITE_NOTE)
+		if (true === SEPARATE_CITE_NOTE)
 			$this->citations = array();
 		else
 			$this->citations = &$this->notes;
@@ -53,7 +53,7 @@ class NoteAndCite
 
 	function note($atts, $content)
 	{
-		if ($content == null)
+		if (null === $content)
 			return '';
 
 		// Calculate bullet number + name
@@ -76,7 +76,7 @@ class NoteAndCite
 		// Calculate bullet number + name
 		$num = count($this->citations) + 1;
 
-		if ($content === null)
+		if (null === $content)
 			$content = '';
 		if (false === is_array($atts))
 			$atts = array();
@@ -108,7 +108,7 @@ class NoteAndCite
 
 	function note_list()
 	{
-		if (count($this->notes) == 0)
+		if (0 === count($this->notes))
 			return '';
 
 		$ret = '<ol class="footnotes">' . PHP_EOL;
@@ -123,7 +123,7 @@ class NoteAndCite
 
 	function cite_list()
 	{
-		if (count($this->citations) == 0)
+		if (0 === count($this->citations))
 			return '';
 
 		$ret = '<ol class="citations">' . PHP_EOL;
