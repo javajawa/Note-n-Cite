@@ -1,3 +1,9 @@
+0.4-SNAPSHOT
+
+ - Bug Fix: Missing # in links
+ - Bug Fix: Error no longer caused by WordPress passing an empty $atts
+ - Add title text to citations
+
 0.3
 
  - Switch to class architecture
