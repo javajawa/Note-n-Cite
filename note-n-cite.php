@@ -3,7 +3,7 @@
 Plugin Name: Note'n'Cite
 Plugin URI: github.com/javajawa/Note-n-Cite
 Description: Lightweight and simple reference & footnotes plugin
-Version: 0.3.1
+Version: 0.3.2
 Author: Benedict Harcourt
 Author URI: harcourtprogramming.co.uk
 License: BSD 3-clause
@@ -65,7 +65,7 @@ class NoteAndCite
 		$note = new Note($this->post, $num, do_shortcode($content));
 		$this->notes[$num] = &$note;
 
-		if (array_key_exists('name', $atts))
+		if (true === is_array($atts) && true === array_key_exists('name', $atts))
 			$this->named_entries[$atts['name']] = &$note;
 
 		return $note->getLink();
@@ -78,6 +78,8 @@ class NoteAndCite
 
 		if ($content === null)
 			$content = '';
+		if (false === is_array($atts))
+			$atts = array();
 
 		if (array_key_exists('href', $atts))
 			$href = $atts['href'];
@@ -95,6 +97,9 @@ class NoteAndCite
 
 	function backref($atts = array())
 	{
+		if (false === is_array($atts))
+			return '';
+
 		if (array_key_exists('name', $atts) && array_key_exists($atts['name'], $this->named_entries))
 			return $this->named_entries[$atts['name']]->getLink();
 		else

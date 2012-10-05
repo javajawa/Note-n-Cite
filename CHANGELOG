@@ -1,6 +1,7 @@
+0.3.2
+ - BUGFIX: [Backport] Handle missing $atts in WordPress gracefully
 0.3.1
-
- - BugFix: Fix missing # in markers, causing broken links
+ - BUGFIX: [Backport] Fix missing # in markers, causing broken links
 
 0.3
 
@@ -15,3 +16,4 @@
  - Add support for supplementary content in citations
  - Citation links have the rel="cite" property
  - BUGFIX: Backrefs now look up the name correctly
+
