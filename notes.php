@@ -26,7 +26,7 @@ class Note
 
 		return sprintf(
 			'<a href="#%s" class="footnote" id="%s" title="%s">%s</a>',
-			$this->getEntryId(), $return, htmlentities(strip_tags($this->content)), $this->num
+			$this->getEntryId(), $return, strip_tags($this->content), $this->num
 		);
 	}
 
@@ -73,15 +73,15 @@ class Citation extends Note
 		if ($this->href == null)
 		{
 			return sprintf(
-				'<a href="#%s" class="citation" id="%s" target="_blank">%s</a>',
-				$this->getEntryId(), $return, self::$blankText
+				'<a href="#%s" class="citation" id="%s" title="%s">%s</a>',
+				$this->getEntryId(), $return, strip_tags($this->content), self::$blankText
 			);
 		}
 		else
 		{
 			return sprintf(
-				'<a href="%s" class="citation" id="%s" target="_blank">%s</a>',
-				$this->href, $return, $this->num
+				'<a href="%s" class="citation" id="%s" target="_blank" title="%s">%s</a>',
+				$this->href, $return, strip_tags($this->content), $this->num
 			);
 		}
 	}
